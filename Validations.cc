@@ -29,8 +29,8 @@ using namespace std;
 
         
         // for (int i=0; i<move.length(); ++i)
-        move[0] = tolower(move[0]);
-        move[6] = tolower(move[6]);
+        // move[0] = tolower(move[0]);
+        // move[6] = tolower(move[6]);
 
         int l1, l2;	
         //convert the letter to a number so it can be used as an index
@@ -78,13 +78,13 @@ using namespace std;
 
         //check if the piece is the current Player's piece
         if(board[n1][l1].piece != nullptr && currPlayer != board[n1][l1].piece->player){
-            cout<<"That's not your piece."<<endl<<endl;
+            cout<<"That's not your piece. "<<endl<<endl;
             return false;
         }
 
         //check if the player has a friendly piece at the desired move location
         if(board[n2][l2].piece != nullptr && currPlayer == board[n2][l2].piece->player){
-            cout<<"You already have a piece there."<<endl<<endl;
+            cout<<"You already have a piece there. "<<endl<<endl;
             return false;
         }
 
@@ -97,33 +97,35 @@ using namespace std;
     /* W'S PAWN  */
         if(board[n1][l1].piece->name.compare("Pawn") == 0 && currPlayer == 'W'){
 
-            //this is to take into account that pawns can move 2 spaces on their first move, but not after
-            if(n1 != 1 && rowDiff <= -2){
-                printw("Pawns can't move like that!!!!!");
+            //pawns can move 2 spaces on their first move, but not after
+            if(n1 != 1 && rowDiff <= -2 || n1 == 1 && rowDiff < -2){
+                printw("Pawns may move 2 spaces forward on their first move.");
                 return false;	
             }
 
             //if it is the pawn's first move and they try to move like 12 spaces
-            else if(n1 == 1 && rowDiff < -2){
-                cout<<"Pawns may move 2 spaces forward on their first move."<<endl<<endl;
-                return false;
-            }
+            // else if(n1 == 1 && rowDiff < -2){
+            //     cout<<"Pawns may move 2 spaces forward on their first move!."<<endl<<endl;
+            //     return false;
+            // }
 
-            //rowDiff must ALWAYS be negative...no backwards or side to side movement for pawns
-            else if(rowDiff >= 0){
-                cout<<"Pawns can't move like that."<<endl<<endl;
+            //rowDiff must ALWAYS be negative. no backwards or side to side movement for pawns
+            //no matter what pawns can only move a maximum of one column over at a time
+            else if(rowDiff >= 0 || abs(colDiff) > 1){
+                printw("Pawns can't move like that.");
                 return false;
             }
             
-            //no matter what pawns can only move a maximum of one column over at a time
-            else if(abs(colDiff) > 1){
-                cout<<"Pawns can't move like that."<<endl<<endl;
-                return false;
-            }
+           
+            // else if(abs(colDiff) > 1){
+            //     cout<<"Pawns can't move like that."<<endl<<endl;
+            //     return false;
+            // }
 
             //if they try to move diagonally without there being an enemy piece there
             else if(abs(colDiff) == 1 && rowDiff == -1 && board[n2][l2].piece == nullptr){
-                cout<<"There must be an enemy piece at "<<l2<<n2<<" for you to move there."<<endl<<endl;
+                mvprintw(28, 0, "There must be an enemy piece at %c%i for you to move there.", l2+1, n2);
+                Sleep(1000);
                 return false;
             }
 
@@ -150,7 +152,7 @@ using namespace std;
                 printw("Move successful!");
                 board[n2][l2].piece = board[n1][l1].piece;
                 board[n1][l1].piece = nullptr;
-                Sleep(1000);
+                Sleep(5000);
                 return true;
             }
         }
@@ -171,20 +173,17 @@ using namespace std;
             }
 
             //rowDiff must ALWAYS be negative...no backwards or side to side movement for pawns
-            else if(rowDiff <= 0){            
+            //no matter what pawns can only move a maximum of one column over at a time
+            else if(rowDiff <= 0 || abs(colDiff) > 1){            
                 cout<<"Pawns can't move like that."<<endl<<endl;
                 return false;
             }
             
-            //no matter what pawns can only move a maximum of one column over at a time
-            else if(abs(colDiff) > 1){            
-                cout<<"Pawns can't move like that."<<endl<<endl;
-                return false;            
-            }
 
             //if they try to move diagonally without there being an enemy piece there
             else if(abs(colDiff) == 1 && rowDiff == 1 && board[n2][l2].piece == nullptr){            
-                cout<<"There must be an enemy piece at "<<l2<<n2<<" for you to move there."<<endl<<endl;
+                // cout<<"There must be an enemy piece at "<<l2<<n2<<" for you to move there."<<endl<<endl;
+                mvprintw(28, 0, "There must be an enemy piece at %c%i for you to move there.", l2+1, n2);
                 return false;
             }
 
@@ -208,7 +207,7 @@ using namespace std;
             
             }
 
-            //valid forward move with no enemy pieces in the way...
+            //valid forward move with no enemy pieces in the way
             else{
                 printw("Move successful!");
                 board[n2][l2].piece = board[n1][l1].piece;
@@ -226,18 +225,15 @@ using namespace std;
                 return false;
             }
         
-        
             if(board[n2][l2].piece != nullptr && board[n2][l2].piece->player != currPlayer){ 
                 printw("You have taken the enemy's %s ", board[n2][l2].piece->name);
-                // cout<<"You have taken the enemy's "<<board[n2][l2].piece->name<<"!"<<endl<<endl;
                 board[n2][l2].piece = board[n1][l1].piece;	//piece taken
                 board[n1][l1].piece = nullptr;
-                Sleep(2000);
                 return true;
             }
 
             else{
-                cout<<"Move successful!"<<endl<<endl;
+                printw("Move successful!");
                 board[n2][l2].piece = board[n1][l1].piece;
                 board[n1][l1].piece = nullptr;
                 Sleep(2000);
@@ -304,8 +300,6 @@ using namespace std;
 
             else if(rowDiff < 0 && colDiff > 0){
 
-                //cout<<"rowDiff < 0 && colDiff > 0"<<endl<<endl;
-            
                 for(int i = n1+1; i < n2; i++){                
                     for(int j = l1-1; j > l2; j --){                    
                         if(board[i][j].piece != nullptr){                        
@@ -319,8 +313,6 @@ using namespace std;
 
             else if(rowDiff == 0 && colDiff > 0){
 
-                //cout<<"rowDiff == 0 && colDiff > 0"<<endl<<endl;
-            
                 for(int i = l1-1; i > l2; i--){                
                     if(board[n1][i].piece != nullptr){                    
                         cout<<"There's a piece blocking your move!"<<endl<<endl;
@@ -416,12 +408,13 @@ using namespace std;
             }
         }
 
+    /*Bishop*/
         else if(board[n1][l1].piece->name.compare("Bishop") == 0){
         
             //just specifying diagonal movmement only
             if(abs(rowDiff) != abs(colDiff)){
-                // cout<<"Bishops can't move like that."<<endl;
-                printw("Bishops can't move like that.");
+                cout<< rowDiff << colDiff;
+                printw("Bishops can't move like that. tuu");
                 return false;
             }
 
@@ -429,8 +422,9 @@ using namespace std;
             if(rowDiff > 0 && colDiff > 0){            
                 for(int i = n1-1; i > n2; i--){                
                     for(int j = l1-1; j > l2; j --){                    
-                        if(board[i][j].piece != nullptr){                        
-                            cout<<"There's a piece blocking your move!"<<endl<<endl;
+                        if(board[i][j].piece != nullptr){  
+                            // printw("There's a piece blocking your move! %s", board[i][j].piece->name );                      
+                            cout<<board[i][j].piece->name<<endl;
                             return false;                        
                         }
                     }
@@ -441,8 +435,10 @@ using namespace std;
             
                 for(int i = n1+1; i < n2; i++){                
                     for(int j = l1+1; j < l2; j ++){                    
-                        if(board[i][j].piece != nullptr){                        
-                            cout<<"There's a piece blocking your move!"<<endl<<endl;
+                        if(board[i][j].piece != nullptr){ 
+                            cout<<board[i][j].piece->name<<endl;  
+                            cout<< i << j<<endl;                
+                            cout<<"There's a piece blocking your movef!"<<endl<<endl;
                             return false;                        
                         }
                     }
@@ -454,22 +450,28 @@ using namespace std;
                 for(int i = n1-1; i > n2; i--){
                     for(int j = l1+1; j < l2; j ++){
                         if(board[i][j].piece != nullptr){
+                            cout<<board[i][j].piece->name<<endl;
+                            cout<< i << j<<endl; 
                             cout<<"There's a piece blocking your move!"<<endl<<endl;
                             return false;
                         }
                     }
                 }
             }
-
-            else if(rowDiff < 0 && colDiff > 0){
             
-                for(int i = n1+1; i < n2; i++){    
-                    for(int j = l1-1; j > l2; j --){
+            else if(rowDiff < 0 && colDiff > 0){
+                cout<<board[1][3].piece->name<<endl;
+                for(int i = n1+1,j = l1-1 ; i < n2, j > l2; i++, j--){    
+                    // for(int j = l1-1; j > l2; j --){
+                        cout<<" j:, i:"<< j<<i;
                         if(board[i][j].piece != nullptr){
-                            cout<<"There's a piece blocking your move!"<<endl<<endl;
+                            
+                            cout<<board[i][j].piece->name<<endl;
+                            cout<< i <<l2<< j<<endl; 
+                            cout<<"There's a piece blocking your moveh!"<<endl<<endl;
                             return false;
                         }
-                    }
+                    // }
                 }
             }
 
@@ -484,7 +486,6 @@ using namespace std;
             }
 
             else{
-
                 printw("Move successful!");
                 board[n2][l2].piece = board[n1][l1].piece;
                 board[n1][l1].piece = nullptr;

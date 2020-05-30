@@ -115,10 +115,7 @@ void Game::play(){
                 currPlayer = 'W';
                 
             display(board);
-            
-
             printw( "\n%c enter your move: ", currPlayer);
-            
             refresh(); 
  
             char* move = new char[10];
@@ -126,17 +123,18 @@ void Game::play(){
             getstr(move);
             
             while(validateFormat(move) == false){
-            
-
                 printw( "Format e.g. 'a1 to a2' Please re-enter.");
                 printw( "\n%c enter your move: ", currPlayer);
-                // getline(cin, move);
                 getstr(move);
             }	
 
             while(validateGameRules(move, board, currPlayer) == false){
-        
-                 printw( "\n%c enter your move: ", currPlayer);
+                // clear();
+                // display(board);
+                
+                mvprintw(27, 0, "%c enter your move: ", currPlayer);
+                // refresh(); 
+                clrtoeol();  //clear one line 
                 getstr(move);
             
             }
@@ -286,7 +284,7 @@ void Game::display(Square board[8][8]){
                 
 
                 //W or B before pieces
-                attron(A_STANDOUT);
+                // attron(A_STANDOUT);
                 if (board[i][j].piece != nullptr){
                     if(board[i][j].piece->player == 'W')
                         displayBoard[tempRow][tempColumn-1] = 'W';
@@ -299,7 +297,7 @@ void Game::display(Square board[8][8]){
         //DISPLAY
         for(int i = 0; i < 26; i++){ //row
             for(int j = 0; j < 53; j++){ //column
-                attron(A_BOLD );
+                // attron(A_BOLD );
                 mvaddch(i, j, displayBoard[i][j]);
             }
         }
