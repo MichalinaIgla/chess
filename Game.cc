@@ -6,21 +6,17 @@
 #include <ctype.h>
 #include <cmath>
 #include <ncurses.h>
-#include <unistd.h>
 #include <string.h>
 // git push -u origin master
 using namespace std;
 // g++ Game.cc Piece.cc Square.cc main.cc Validations.cc -lncurses -o play
 Game :: Game(){}
 Game :: ~Game(){}
-void Sleep(unsigned milliseconds)
-{
-	usleep(milliseconds * 1000); // takes microseconds
-}
-void Game::play(){
+
+int Game::play(){
 
 
-        WINDOW *win = newwin(50,50, 0,0 );
+        // WINDOW *win = newwin(50,50, 0,0 );
         initscr(); 
         
         int row,col;
@@ -102,16 +98,12 @@ void Game::play(){
         board[6][6].piece = &p25;
         board[6][7].piece = &p26;
 
-
         char currPlayer = 'B';
 
-        int p1Pieces = 16;	//these will be used to determine when the game is over (# of pieces = 0 for either player)
-        int p2Pieces = 16;
+        // int p1Pieces = 16;	
+        // int p2Pieces = 16;
 
-        // string move;	//move to be parsed
-
-
-        // Main loop 
+    /* main loop */ 
         while(true){	
 
             // clear();
@@ -129,28 +121,30 @@ void Game::play(){
  
             char* move = new char[10];
             getstr(move);
-            // if (strcmp(move, "exit") == 0){
-            //     endwin();
-            //     return 0;}
+            if (strcmp(move, "exit") == 0){
+                endwin();
+                return 0;}
             
             while(validateFormat(move) == false){
                 printw( "Format 'a1 to a2' Please re-enter.");
-                // printw( "\n%c enter your move: ", currPlayer);
-                mvprintw(27, 0, "%c enter your move: ", currPlayer);
+                mvprintw(27, 0, " %c enter your move: ", currPlayer);
                 clrtoeol();
                 getstr(move);
+                if (strcmp(move, "exit") == 0){
+                    endwin();
+                    return 0;}
             }	
-            // refresh();
-            clrtoeol();
-            while(validateGameRules(move, board, currPlayer) == false){
 
-                mvprintw(27, 0, "%c enter your move: ", currPlayer);
+            clrtoeol();
+
+            while(validateGameRules(move, board, currPlayer) == false){
+                mvprintw(27, 0, " %c enter your move: ", currPlayer);
                 clrtoeol();  //clear one line 
                 getstr(move);
             
             }
-
-            mvprintw(28, 0, "Move successful!");
+            // mvprintw(29, 0,  "Move successful!");
+            mvprintw(28, 0, "Move successful!"); //28
             clrtoeol();
         }
     }
@@ -161,7 +155,6 @@ void Game::play(){
             for (int i=0; i<move.length(); ++i)
                 move[i] = tolower(move[i]);
 
-            
             //a valid move has 8 characters
             if(move.length() != 8)
                 return false;
@@ -195,7 +188,6 @@ void Game::play(){
 void Game::display(Square board[8][8]){
 
         char displayBoard[27][54] = {
- 
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'A', ' ', ' ', ' ', ' ', ' ', 'B', ' ', ' ', ' ', ' ', ' ', 'C', ' ', ' ', ' ', ' ', ' ', 'D', ' ', ' ', ' ', ' ', ' ', 'E', ' ', ' ', ' ', ' ', ' ', 'F', ' ', ' ', ' ', ' ', ' ', 'G', ' ', ' ', ' ', ' ', ' ', 'H', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}, 
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' '},
@@ -249,7 +241,7 @@ void Game::display(Square board[8][8]){
             
             for(int j = 0; j < 8; j++){ //column
                 if(j == 0)
-                    tempColumn = 7; //dC0
+                    tempColumn = 7; 
                 else if(j == 1)
                     tempColumn = 13;
                 else if(j == 2)	
