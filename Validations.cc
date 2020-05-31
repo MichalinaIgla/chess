@@ -62,6 +62,10 @@ using namespace std;
             l2 = 6;
         else
             l2 = 7;
+
+        // string  name = board[n1][l1].piece->name;
+        // mvprintw(30, 0,"tuututu %s", name);
+
             
 
         if(board[n1][l1].piece == nullptr){
@@ -118,8 +122,9 @@ using namespace std;
             }
             
             //if pawn is Queen now and taken enemy piece
-            else if (rowDiff == -1 && abs(colDiff) == 1 && board[n2][l2].piece->player == 2 && n2 == 7){
-                mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
+            else if (rowDiff == -1 && abs(colDiff) == 1 && board[n2][l2].piece->player == 'B' && n2 == 7){
+                // mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
+                mvprintw(29, 0,"You have taken the enemy's piece!");
                 board[n2][l2].piece = board[n1][l1].piece;
                 board[n2][l2].piece->name = "Queen";
                 board[n1][l1].piece = nullptr;
@@ -127,8 +132,9 @@ using namespace std;
             }
 
             //if they try to move diagonally to a space and there's an enemy piece there
-            else if(rowDiff == -1 && abs(colDiff) == 1 && board[n2][l2].piece->player == 2){
-                mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
+            else if(rowDiff == -1 && abs(colDiff) == 1 && board[n2][l2].piece->player == 'B'){
+                // mvprintw(29, 0, "You have taken the enemy's %s ",  board[n2][l2].piece->name);
+                mvprintw(29, 0,"You have taken the enemy's piece!");
                 board[n2][l2].piece = board[n1][l1].piece;	//piece taken
                 board[n1][l1].piece = nullptr;
                 return true;
@@ -176,13 +182,13 @@ using namespace std;
             }
 
             //if 1 space forward but there's an enemy there
-            else if(rowDiff == 1 && colDiff == 0 && board[n2][l2].piece != nullptr && board[n2][l2].piece->player == 1){
+            else if(rowDiff == 1 && colDiff == 0 && board[n2][l2].piece != nullptr && board[n2][l2].piece->player == 'W'){
                 printw("An enemy piece is blocking your move!");
                 return false;
             }
 
             //making a queen
-            else if(rowDiff == 1 && abs(colDiff) == 1 && board[n2][l2].piece->player == 1 && n2 == 0){
+            else if(rowDiff == 1 && abs(colDiff) == 1 && board[n2][l2].piece->player == 'W' && n2 == 0){
                 mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
                 board[n2][l2].piece = board[n1][l1].piece;
                 board[n2][l2].piece->name = "Queen";
@@ -191,8 +197,9 @@ using namespace std;
             }
 
             //if diagonally to a space and there's an enemy piece there...
-            else if(rowDiff == 1 && abs(colDiff) == 1 && board[n2][l2].piece->player == 1){
-                mvprintw(29, 0,"You have taken the enemy's %s tuuuuuu!", board[n2][l2].piece->name);
+            else if(rowDiff == 1 && abs(colDiff) == 1 && board[n2][l2].piece->player == 'W'){
+                // mvprintw(29, 0,"You have taken the enemy's %s tuuuuuu!", board[n2][l2].piece->name);
+                mvprintw(29, 0,"You have taken the enemy's piece!");
                 board[n2][l2].piece = board[n1][l1].piece;	//piece taken
                 board[n1][l1].piece = nullptr;
                 // refresh();
@@ -210,7 +217,6 @@ using namespace std;
 
             //valid move
             else{
-                // mvprintw(29, 20, "tuuuuuuuuu");
                 board[n2][l2].piece = board[n1][l1].piece;
                 board[n1][l1].piece = nullptr;
                 return true;
@@ -227,7 +233,8 @@ using namespace std;
 
             //piece taken
             if(board[n2][l2].piece != nullptr && board[n2][l2].piece->player != currPlayer){ 
-                mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
+                // mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
+                mvprintw(29, 0,"You have taken the enemy's piece!");
                 board[n2][l2].piece = board[n1][l1].piece;	
                 board[n1][l1].piece = nullptr;
                 return true;
@@ -253,12 +260,12 @@ using namespace std;
 
             //COLLISIONS
             if(rowDiff > 0 && colDiff > 0){
-             for(int i = n1-1,j = l1-1; i > n2; i--,j--){
-                if(board[i][j].piece != NULL){
-                    mvprintw(28, 0, "There's a piece blocking your move!");
-                    return false;
+                for(int i = n1-1,j = l1-1; i > n2; i--,j--){
+                    if(board[i][j].piece != NULL){
+                        mvprintw(28, 0, "There's a piece blocking your move!");
+                        return false;
+                    }
                 }
-              }
             }
 
             else if(rowDiff < 0 && colDiff < 0){
@@ -281,7 +288,7 @@ using namespace std;
             }
 
             else if(rowDiff < 0 && colDiff > 0){ 
-                  for(int i = n1+1,j = l1-1; i < n2; i++, j --){
+                for(int i = n1+1,j = l1-1; i < n2; i++, j --){
                     if(board[i][j].piece != NULL){
                         mvprintw(28, 0, "There's a piece blocking your move!");
                         return false;
@@ -328,7 +335,8 @@ using namespace std;
 
             //piece taken
             if(board[n2][l2].piece != nullptr && board[n2][l2].piece->player != currPlayer){
-                 mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
+                //  mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
+                 mvprintw(29, 0,"You have taken the enemy's piece!");
                 board[n2][l2].piece = board[n1][l1].piece;
                 board[n1][l1].piece = nullptr;
                 return true;
@@ -352,7 +360,8 @@ using namespace std;
         
             //piece taken
             if(board[n2][l2].piece != nullptr && board[n2][l2].piece->player != currPlayer){
-                mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
+                // mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
+                mvprintw(29, 0,"You have taken the enemy's piece!");
                 board[n2][l2].piece = board[n1][l1].piece;	
                 board[n1][l1].piece = nullptr;
                 return true;
@@ -377,16 +386,16 @@ using namespace std;
 
             //COLLISIONS
             if(rowDiff > 0 && colDiff > 0){            
-                  for(int i = n1-1,j = l1-1; i > n2; i--,j--){
-                        if(board[i][j].piece != NULL){
-                            mvprintw(28, 0, "There's a piece blocking your move!");
-                            return false;                       
-                        }
+                for(int i = n1-1,j = l1-1; i > n2; i--,j--){
+                    if(board[i][j].piece != NULL){
+                        mvprintw(28, 0, "There's a piece blocking your move!");
+                        return false;                       
+                    }
                     }
             }
 
             else if(rowDiff < 0 && colDiff < 0){
-                 for(int i = n1+1,j = l1+1; i < n2; i++,j ++){
+                for(int i = n1+1,j = l1+1; i < n2; i++,j ++){
                     if(board[i][j].piece != NULL){
                         mvprintw(28, 0, "There's a piece blocking your move!");
                         return false;
@@ -395,7 +404,7 @@ using namespace std;
             }
 
             else if(rowDiff > 0 && colDiff < 0){
-                  for(int i = n1-1,j = l1+1; i > n2; i--,j ++){
+                for(int i = n1-1,j = l1+1; i > n2; i--,j ++){
                     if(board[i][j].piece != NULL){
                        mvprintw(28, 0, "There's a piece blocking your move!");
                         return false;
@@ -406,17 +415,17 @@ using namespace std;
             else if(rowDiff < 0 && colDiff > 0){
                 cout<<board[1][3].piece->name<<endl;
                 for(int i = n1+1,j = l1-1 ; i < n2, j > l2; i++, j--){    
-                        if(board[i][j].piece != nullptr){
-                            mvprintw(28, 0, "There's a piece blocking your move!");
-                            return false;
-                        }
-                    
+                    if(board[i][j].piece != nullptr){
+                        mvprintw(28, 0, "There's a piece blocking your move!");
+                        return false;
+                    }
                 }
             }
 
             //pice taken
             if(board[n2][l2].piece != nullptr && board[n2][l2].piece->player != currPlayer){
-                printw("You have taken the enemy's %s !",board[n2][l2].piece->name );
+                // printw("You have taken the enemy's %s !",board[n2][l2].piece->name );
+                mvprintw(29, 0,"You have taken the enemy's piece!");
                 board[n2][l2].piece = board[n1][l1].piece;
                 board[n1][l1].piece = nullptr;
                 return true;
@@ -459,7 +468,7 @@ using namespace std;
             else if(rowDiff > 0 && colDiff == 0){
                 for(int i = n1-1; i > n2; i--){
                     if(board[i][l1].piece != nullptr){
-                       mvprintw(28, 0, "There's a piece blocking your move!");
+                        mvprintw(28, 0, "There's a piece blocking your move!");
                         return false;
                     }
                 }
@@ -476,8 +485,8 @@ using namespace std;
         
             //piece taken
             if(board[n2][l2].piece != nullptr && board[n2][l2].piece->player != currPlayer){
-            
-                printw("You have taken the enemy's %s !",board[n2][l2].piece->name );
+                mvprintw(29, 0,"You have taken the enemy's piece!");
+                // printw("You have taken the enemy's %s !",board[n2][l2].piece->name );
                 board[n2][l2].piece = board[n1][l1].piece;
                 board[n1][l1].piece = nullptr;
                 return true;

@@ -115,17 +115,17 @@ int Game::play(){
                 currPlayer = 'W';
                 
             display(board);
-            printw( "\n%c enter your move: ", currPlayer);
+            mvprintw(27, 0, "%c enter your move: ", currPlayer);
             clrtoeol(); //clear line
             refresh(); 
  
             char* move = new char[10];
             getstr(move);
-            if (strcmp(move, "exit") == 0){
-                endwin();
-                return 0;}
-            
+
+
+            clrtoeol();
             while(validateFormat(move) == false){
+
                 printw( "Format 'a1 to a2' Please re-enter.");
                 mvprintw(27, 0, " %c enter your move: ", currPlayer);
                 clrtoeol();
@@ -138,7 +138,7 @@ int Game::play(){
             clrtoeol();
 
             while(validateGameRules(move, board, currPlayer) == false){
-                mvprintw(27, 0, " %c enter your move: ", currPlayer);
+                mvprintw(27, 0, "%c enter your move: ", currPlayer);
                 clrtoeol();  //clear one line 
                 getstr(move);
             
@@ -295,8 +295,15 @@ void Game::display(Square board[8][8]){
         //DISPLAY
         for(int i = 0; i < 26; i++){ //row
             for(int j = 0; j < 53; j++){ //column
-                // attron(A_BOLD );
-                mvaddch(i, j, displayBoard[i][j]);
+                if (displayBoard[i][j] == ' '){
+                    
+                    attron(A_NORMAL);
+                    mvaddch(i, j, displayBoard[i][j]);
+                }else{
+                    attron(A_BOLD );
+                    mvaddch(i, j, displayBoard[i][j]);
+                }
+                
             }
         }
 
