@@ -6,15 +6,23 @@
 #include <ctype.h>
 #include <cmath>
 #include <ncurses.h>
+#include <unistd.h>
+#include <string.h>
 // git push -u origin master
 using namespace std;
-// g++ Game.cc Piece.cc Square.cc main.cc Validations.cc -lncurses -o play2
+// g++ Game.cc Piece.cc Square.cc main.cc Validations.cc -lncurses -o play
 Game :: Game(){}
 Game :: ~Game(){}
-
+void Sleep(unsigned milliseconds)
+{
+	usleep(milliseconds * 1000); // takes microseconds
+}
 void Game::play(){
 
+
+        WINDOW *win = newwin(50,50, 0,0 );
         initscr(); 
+        
         int row,col;
         keypad(stdscr, TRUE);
         getmaxyx(stdscr,row,col);
@@ -106,7 +114,7 @@ void Game::play(){
         // Main loop 
         while(true){	
 
-            clear();
+            // clear();
 
             //switching the player
             if(currPlayer == 'W')
@@ -116,37 +124,44 @@ void Game::play(){
                 
             display(board);
             printw( "\n%c enter your move: ", currPlayer);
+            clrtoeol(); //clear line
             refresh(); 
  
             char* move = new char[10];
-            // string move;
             getstr(move);
+            // if (strcmp(move, "exit") == 0){
+            //     endwin();
+            //     return 0;}
             
             while(validateFormat(move) == false){
-                printw( "Format e.g. 'a1 to a2' Please re-enter.");
-                printw( "\n%c enter your move: ", currPlayer);
+                printw( "Format 'a1 to a2' Please re-enter.");
+                // printw( "\n%c enter your move: ", currPlayer);
+                mvprintw(27, 0, "%c enter your move: ", currPlayer);
+                clrtoeol();
                 getstr(move);
             }	
-
+            // refresh();
+            clrtoeol();
             while(validateGameRules(move, board, currPlayer) == false){
-                // clear();
-                // display(board);
-                
+
                 mvprintw(27, 0, "%c enter your move: ", currPlayer);
-                // refresh(); 
                 clrtoeol();  //clear one line 
                 getstr(move);
             
             }
+
+            mvprintw(28, 0, "Move successful!");
+            clrtoeol();
         }
     }
 
-    // // make sure that the user has entered a potentially correct move based on formatting alone
+/*check if user has entered a potentially correct move based on formatting alone */
     bool Game::validateFormat(string move){
 
             for (int i=0; i<move.length(); ++i)
                 move[i] = tolower(move[i]);
 
+            
             //a valid move has 8 characters
             if(move.length() != 8)
                 return false;
@@ -171,7 +186,8 @@ void Game::play(){
             // numbers for destination index
             if(move[7] != '0' && move[7] != '1' && move[7] != '2' && move[7] != '3' && move[7] != '4' && move[7] != '5' && move[7] != '6' && move[7] != '7')
                 return false;
-            
+
+
             else return true;
     }
 
@@ -204,20 +220,10 @@ void Game::display(Square board[8][8]){
         {' ', ' ', '1', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' '},
         {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' '},
         {' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {' ', ' ', '0', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', 'Q', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', '0', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
         {' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', '#', '#', '#', '#', '#', '#', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
 
     };
-
-        //"displayColumn"
-        int dC0 = 7;
-        int dC1 = 13;
-        int dC2 = 19;
-        int dC3 = 25;
-        int dC4 = 31;
-        int dC5 = 37;
-        int dC6 = 43;
-        int dC7 = 49;
 
         int tempRow = 0;
         int tempColumn = 0;

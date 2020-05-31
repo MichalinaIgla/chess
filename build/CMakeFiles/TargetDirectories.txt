@@ -1,0 +1,3 @@
+/home/eevee/cpp_projekt/myChess/build/CMakeFiles/rebuild_cache.dir
+/home/eevee/cpp_projekt/myChess/build/CMakeFiles/edit_cache.dir
+/home/eevee/cpp_projekt/myChess/build/CMakeFiles/Chess.dir

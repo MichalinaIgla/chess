@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/eevee/cpp_projekt/myChess/src/Game.cc
+iostream
+-
+sstream
+-
+ctype.h
+-
+cmath
+-
+ncurses.h
+-
+
