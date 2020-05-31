@@ -7,7 +7,7 @@
 #include <cmath>
 #include <ncurses.h>
 #include <string.h>
-// git push -u origin master
+
 using namespace std;
 // g++ Game.cc Piece.cc Square.cc main.cc Validations.cc -lncurses -o play
 Game :: Game(){}
@@ -25,11 +25,11 @@ int Game::play(){
 
         Square board[8][8];	//chess board
 
-        Piece k10("King", 'W');		 //the first digit indicates which player's piece it is followed by the piece's unique number
+        Piece k10("King", 'W');		 
         Piece q10("Queen", 'W');
         Piece r10("Rook", 'W');
-        Piece r11("Rook", 'W');		//the pieces are designated solely by their name; a string. 
-        Piece b10("Bishop", 'W');	//string comparisons must be used to figure out which piece is which.
+        Piece r11("Rook", 'W');		
+        Piece b10("Bishop", 'W');
         Piece b11("Bishop", 'W');
         Piece kn10("Knight", 'W');
         Piece kn11("Knight", 'W');
@@ -100,13 +100,9 @@ int Game::play(){
 
         char currPlayer = 'B';
 
-        // int p1Pieces = 16;	
-        // int p2Pieces = 16;
 
     /* main loop */ 
         while(true){	
-
-            // clear();
 
             //switching the player
             if(currPlayer == 'W')
@@ -121,13 +117,13 @@ int Game::play(){
  
             char* move = new char[10];
             getstr(move);
-
-
+            mvprintw(29, 0, "");
             clrtoeol();
+
             while(validateFormat(move) == false){
 
-                printw( "Format 'a1 to a2' Please re-enter.");
-                mvprintw(27, 0, " %c enter your move: ", currPlayer);
+                mvprintw(28, 0,"Format 'a1 to a2' Please re-enter.");
+                mvprintw(27, 0, "%c enter your move: ", currPlayer);
                 clrtoeol();
                 getstr(move);
                 if (strcmp(move, "exit") == 0){
@@ -141,10 +137,9 @@ int Game::play(){
                 mvprintw(27, 0, "%c enter your move: ", currPlayer);
                 clrtoeol();  //clear one line 
                 getstr(move);
-            
             }
-            // mvprintw(29, 0,  "Move successful!");
-            mvprintw(28, 0, "Move successful!"); //28
+
+            mvprintw(28, 0, "Move successful!"); 
             clrtoeol();
         }
     }
@@ -282,7 +277,6 @@ void Game::display(Square board[8][8]){
                 
 
                 //W or B before pieces
-                // attron(A_STANDOUT);
                 if (board[i][j].piece != nullptr){
                     if(board[i][j].piece->player == 'W')
                         displayBoard[tempRow][tempColumn-1] = 'W';
@@ -291,18 +285,23 @@ void Game::display(Square board[8][8]){
                 }
             }
         }
+        init_pair(7, COLOR_WHITE, COLOR_BLACK);
+        init_pair(4, COLOR_BLUE, COLOR_BLACK);
 
+        
         //DISPLAY
         for(int i = 0; i < 26; i++){ //row
             for(int j = 0; j < 53; j++){ //column
-                if (displayBoard[i][j] == ' '){
-                    
-                    attron(A_NORMAL);
+            
+                // if (displayBoard[i][j] == ' '){
+                //     attron(A_STANDOUT);
+                //     mvaddch(i, j, displayBoard[i][j]);
+                // }else{
+                    // attron(A_REVERSE );
+                    // attron(COLOR_PAIR(4));
+                    // attron(A_NORMAL);
                     mvaddch(i, j, displayBoard[i][j]);
-                }else{
-                    attron(A_BOLD );
-                    mvaddch(i, j, displayBoard[i][j]);
-                }
+                // }
                 
             }
         }

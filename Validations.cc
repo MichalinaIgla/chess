@@ -9,17 +9,17 @@
 #include <unistd.h>
 using namespace std;
 
-    //this function performs all chess rules validation of the previously correctly-formatted move
+    //this method  performs all chess rules validation 
     bool Game::validateGameRules(string move, Square board[8][8], char currPlayer){
 
         //convert to INT
         stringstream stream;
         int n1, n2;
-        stream<<move[1];  //convert the char number to an int number
+        stream<<move[1]; //convert 
         stream>>n1;
         stream.clear();
 
-        stream<<move[7]; //convert the char number to an int number
+        stream<<move[7]; //convert 
         stream>>n2;
 
 
@@ -27,7 +27,7 @@ using namespace std;
         move[6] = tolower(move[6]);
 
         int l1, l2;	
-        //convert the letter to a number so it can be used as an index
+        //letters to a number so it can be used as an index
         if(move[0] == 'a')
             l1 = 0;
         else if(move[0] == 'b')
@@ -69,19 +69,19 @@ using namespace std;
             
 
         if(board[n1][l1].piece == nullptr){
-            printw("There's no piece at the specified location.");
+            mvprintw(28, 0, "There's no piece at the specified location.");
             return false;
         }
 
         //check if the piece is the current Player's piece
         if(board[n1][l1].piece != nullptr && currPlayer != board[n1][l1].piece->player){
-            printw("That's not your piece. ");
+            mvprintw(28, 0, "That's not your piece.                     ");
             return false;
         }
 
         //check if the player has a friendly piece at the desired move location
         if(board[n2][l2].piece != nullptr && currPlayer == board[n2][l2].piece->player){
-            printw("You already have a piece there. ");
+            mvprintw(28, 0, "You already have a piece there.            ");
             return false;
         }
 
@@ -170,7 +170,7 @@ using namespace std;
             //rowDiff must be negative no backwards or side to side movement for pawns
             //no matter what pawns can only move a maximum of one column over at a time
             else if(rowDiff <= 0 || abs(colDiff) > 1){            
-                printw("Pawns can't move like that.");
+                printw("Pawns can't move like that.                         ");
                 return false;
             }
             
@@ -183,13 +183,13 @@ using namespace std;
 
             //if 1 space forward but there's an enemy there
             else if(rowDiff == 1 && colDiff == 0 && board[n2][l2].piece != nullptr && board[n2][l2].piece->player == 'W'){
-                printw("An enemy piece is blocking your move!");
+                printw("An enemy piece is blocking your move!                ");
                 return false;
             }
 
             //making a queen
             else if(rowDiff == 1 && abs(colDiff) == 1 && board[n2][l2].piece->player == 'W' && n2 == 0){
-                mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
+                mvprintw(29, 0,"You have taken the enemy's piece!");
                 board[n2][l2].piece = board[n1][l1].piece;
                 board[n2][l2].piece->name = "Queen";
                 board[n1][l1].piece = nullptr;
@@ -198,7 +198,6 @@ using namespace std;
 
             //if diagonally to a space and there's an enemy piece there...
             else if(rowDiff == 1 && abs(colDiff) == 1 && board[n2][l2].piece->player == 'W'){
-                // mvprintw(29, 0,"You have taken the enemy's %s tuuuuuu!", board[n2][l2].piece->name);
                 mvprintw(29, 0,"You have taken the enemy's piece!");
                 board[n2][l2].piece = board[n1][l1].piece;	//piece taken
                 board[n1][l1].piece = nullptr;
@@ -233,7 +232,6 @@ using namespace std;
 
             //piece taken
             if(board[n2][l2].piece != nullptr && board[n2][l2].piece->player != currPlayer){ 
-                // mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
                 mvprintw(29, 0,"You have taken the enemy's piece!");
                 board[n2][l2].piece = board[n1][l1].piece;	
                 board[n1][l1].piece = nullptr;
@@ -336,7 +334,7 @@ using namespace std;
             //piece taken
             if(board[n2][l2].piece != nullptr && board[n2][l2].piece->player != currPlayer){
                 //  mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
-                 mvprintw(29, 0,"You have taken the enemy's piece!");
+                 mvprintw(29, 0,"You have taken the enemy's piece!     ");
                 board[n2][l2].piece = board[n1][l1].piece;
                 board[n1][l1].piece = nullptr;
                 return true;
@@ -361,7 +359,7 @@ using namespace std;
             //piece taken
             if(board[n2][l2].piece != nullptr && board[n2][l2].piece->player != currPlayer){
                 // mvprintw(29, 0,"You have taken the enemy's %s ", board[n2][l2].piece->name);
-                mvprintw(29, 0,"You have taken the enemy's piece!");
+                mvprintw(29, 0, "You have taken the enemy's piece!");
                 board[n2][l2].piece = board[n1][l1].piece;	
                 board[n1][l1].piece = nullptr;
                 return true;
