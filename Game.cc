@@ -16,12 +16,9 @@ Game :: ~Game(){}
 int Game::play(){
 
 
-        // WINDOW *win = newwin(50,50, 0,0 );
+
         initscr(); 
-        
-        int row,col;
         keypad(stdscr, TRUE);
-        getmaxyx(stdscr,row,col);
 
         Square board[8][8];	//chess board
 
@@ -110,6 +107,7 @@ int Game::play(){
             else
                 currPlayer = 'W';
                 
+
             display(board);
             mvprintw(27, 0, "%c enter your move: ", currPlayer);
             clrtoeol(); //clear line
@@ -135,7 +133,7 @@ int Game::play(){
 
             while(validateGameRules(move, board, currPlayer) == false){
                 mvprintw(27, 0, "%c enter your move: ", currPlayer);
-                clrtoeol();  //clear one line 
+                clrtoeol(); 
                 getstr(move);
             }
 
@@ -285,23 +283,13 @@ void Game::display(Square board[8][8]){
                 }
             }
         }
-        init_pair(7, COLOR_WHITE, COLOR_BLACK);
-        init_pair(4, COLOR_BLUE, COLOR_BLACK);
 
         
         //DISPLAY
         for(int i = 0; i < 26; i++){ //row
             for(int j = 0; j < 53; j++){ //column
-            
-                // if (displayBoard[i][j] == ' '){
-                //     attron(A_STANDOUT);
-                //     mvaddch(i, j, displayBoard[i][j]);
-                // }else{
-                    // attron(A_REVERSE );
-                    // attron(COLOR_PAIR(4));
-                    // attron(A_NORMAL);
+
                     mvaddch(i, j, displayBoard[i][j]);
-                // }
                 
             }
         }
